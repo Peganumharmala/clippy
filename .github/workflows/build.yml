@@ -54,3 +54,39 @@ jobs:
             out/**/*.deb
             out/**/*.rpm
             out/**/*setup*.exe
+
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      - name: Flatten artifacts
+        shell: bash
+        run: |
+          mkdir -p release-files
+          find artifacts -type f \( -name "*.zip" -o -name "*.deb" -o -name "*.rpm" -o -name "*setup*.exe" \) -exec cp {} release-files/ \;
+          ls -la release-files/
+      - name: Create or update release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: Clippy (Latest Build)
+          body: |
+            Latest build of Clippy with cloud API support (OpenAI, Claude, Gemini).
+
+            **Downloads:**
+            - **macOS (Apple Silicon):** `Clippy-darwin-arm64-*.zip`
+            - **macOS (Intel):** `Clippy-darwin-x64-*.zip`
+            - **Windows:** `Clippy-win32-x64-*.zip` or `*setup*.exe`
+            - **Linux:** `.deb` or `.rpm`
+          draft: false
+          prerelease: false
+          make_latest: true
+          files: release-files/*
