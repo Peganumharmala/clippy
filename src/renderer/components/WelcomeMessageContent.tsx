@@ -31,9 +31,8 @@ export const WelcomeMessageContent: React.FC = () => {
       </p>
       <p>
         It supports a variety of models, including Google's Gemma3, Meta's
-        Llama3, or Microsoft's Phi-4 Mini. We've already started downloading the
-        smallest model for you in the background. You can choose a bigger, more
-        powerful model in the settings.
+        Llama3, or Microsoft's Phi-4 Mini, and can also be linked to cloud LLM
+        providers.
       </p>
       <p>
         By the way, you can open or close this chat window by clicking right on

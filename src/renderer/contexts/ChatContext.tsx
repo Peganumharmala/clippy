@@ -225,6 +225,11 @@ export function ChatProvider({ children }: { children: ReactNode }) {
       return;
     }
 
+    if (settings.useApiModel && settings.apiKey && settings.apiModelId) {
+      setIsModelLoaded(true);
+      return;
+    }
+
     if (settings.selectedModel) {
       loadModel();
     } else if (!settings.selectedModel && isModelLoaded) {
@@ -242,6 +247,9 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     settings.systemPrompt,
     settings.topK,
     settings.temperature,
+    settings.useApiModel,
+    settings.apiKey,
+    settings.apiModelId,
   ]);
 
   // If selectedModel is undefined or not available, set it to the first downloaded model
@@ -268,8 +276,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
-  // At app startup, check if any models are ready. If none are, kick off a download
-  // for our smallest model and tell the user about it.
+  // At app startup, show the welcome message if no models are ready
   useEffect(() => {
     if (
       messages.length > 0 ||
@@ -292,16 +299,6 @@ export function ChatProvider({ children }: { children: ReactNode }) {
       sender: "clippy",
       createdAt: Date.now(),
     });
-
-    const downloadModelIfNoneReady = async () => {
-      await clippyApi.downloadModelByName("Gemma 3 (1B)");
-
-      setTimeout(async () => {
-        await clippyApi.updateModelState();
-      }, 500);
-    };
-
-    void downloadModelIfNoneReady();
   }, [models]);
 
   // Subscribe to the main process's newChat event

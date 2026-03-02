@@ -18,6 +18,26 @@ export interface ManagedModel extends Model {
 
 export type ModelState = Record<string, ManagedModel>;
 
+export type ApiProvider = "openai" | "anthropic" | "gemini";
+
+export const API_PROVIDERS: Record<
+  ApiProvider,
+  { label: string; placeholder: string }
+> = {
+  openai: {
+    label: "OpenAI",
+    placeholder: "e.g. gpt-4o, o3, gpt-4.1-mini",
+  },
+  anthropic: {
+    label: "Claude (Anthropic)",
+    placeholder: "e.g. claude-sonnet-4-20250514, claude-3-5-haiku-20241022",
+  },
+  gemini: {
+    label: "Gemini (Google)",
+    placeholder: "e.g. gemini-2.0-flash, gemini-2.5-flash-preview-05-20",
+  },
+};
+
 export const BUILT_IN_MODELS: Model[] = [
   {
     name: "Gemma 3 (1B)",

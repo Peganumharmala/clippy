@@ -1,4 +1,4 @@
-import { ModelState } from "./models";
+import { ApiProvider, ModelState } from "./models";
 
 export type DefaultFont =
   | "Pixelated MS Sans Serif"
@@ -18,6 +18,10 @@ export interface SettingsState {
   defaultFont: DefaultFont;
   defaultFontSize: number;
   disableAutoUpdate?: boolean;
+  useApiModel?: boolean;
+  apiProvider?: ApiProvider;
+  apiKey?: string;
+  apiModelId?: string;
 }
 
 export interface SharedState {

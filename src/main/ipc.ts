@@ -1,6 +1,7 @@
 import { clipboard, Data, ipcMain } from "electron";
 import {
   toggleChatWindow,
+  getMainWindow,
   maximizeChatWindow,
   minimizeChatWindow,
 } from "./windows";
@@ -14,6 +15,7 @@ import { checkForUpdates } from "./update";
 import { getVersions } from "./helpers/getVersions";
 import { getClippyDebugInfo } from "./debug-clippy";
 import { getDebugManager } from "./debug";
+import { apiPromptStreaming, abortApiRequest } from "./api-llm";
 
 export function setupIpcListeners() {
   // Window
@@ -95,6 +97,17 @@ export function setupIpcListeners() {
   ipcMain.handle(IpcMessages.CHAT_DELETE_ALL_CHATS, () =>
     getChatManager().deleteAllChats(),
   );
+
+  // API LLM
+  ipcMain.handle(IpcMessages.API_PROMPT_STREAMING, (_, request) => {
+    const mainWindow = getMainWindow();
+    if (mainWindow) {
+      apiPromptStreaming(mainWindow, request);
+    }
+  });
+  ipcMain.handle(IpcMessages.API_ABORT_REQUEST, (_, requestUUID: string) => {
+    abortApiRequest(requestUUID);
+  });
 
   // Clipboard
   ipcMain.handle(IpcMessages.CLIPBOARD_WRITE, (_, data: Data) =>

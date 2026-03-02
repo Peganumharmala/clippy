@@ -96,6 +96,42 @@ const clippyApi: ClippyApi = {
   getVersions: () => ipcRenderer.invoke(IpcMessages.APP_GET_VERSIONS),
   checkForUpdates: () => ipcRenderer.invoke(IpcMessages.APP_CHECK_FOR_UPDATES),
 
+  // API LLM
+  apiPromptStreaming: (request: any) =>
+    ipcRenderer.invoke(IpcMessages.API_PROMPT_STREAMING, request),
+  apiAbortRequest: (requestUUID: string) =>
+    ipcRenderer.invoke(IpcMessages.API_ABORT_REQUEST, requestUUID),
+  onApiPromptChunk: (
+    callback: (requestUUID: string, chunk: string) => void,
+  ) => {
+    ipcRenderer.on(
+      IpcMessages.API_PROMPT_CHUNK,
+      (_event, requestUUID, chunk) => callback(requestUUID, chunk),
+    );
+  },
+  offApiPromptChunk: () => {
+    ipcRenderer.removeAllListeners(IpcMessages.API_PROMPT_CHUNK);
+  },
+  onApiPromptDone: (callback: (requestUUID: string) => void) => {
+    ipcRenderer.on(IpcMessages.API_PROMPT_DONE, (_event, requestUUID) =>
+      callback(requestUUID),
+    );
+  },
+  offApiPromptDone: () => {
+    ipcRenderer.removeAllListeners(IpcMessages.API_PROMPT_DONE);
+  },
+  onApiPromptError: (
+    callback: (requestUUID: string, error: string) => void,
+  ) => {
+    ipcRenderer.on(
+      IpcMessages.API_PROMPT_ERROR,
+      (_event, requestUUID, error) => callback(requestUUID, error),
+    );
+  },
+  offApiPromptError: () => {
+    ipcRenderer.removeAllListeners(IpcMessages.API_PROMPT_ERROR);
+  },
+
   // Clipboard
   clipboardWrite: (data: Data) =>
     ipcRenderer.invoke(IpcMessages.CLIPBOARD_WRITE, data),

@@ -41,6 +41,13 @@ export const IpcMessages = {
   CHAT_DELETE_ALL_CHATS: "clippy_chat_delete_all_chats",
   CHAT_NEW_CHAT: "clippy_chat_new_chat",
 
+  // API LLM
+  API_PROMPT_STREAMING: "clippy_api_prompt_streaming",
+  API_PROMPT_CHUNK: "clippy_api_prompt_chunk",
+  API_PROMPT_DONE: "clippy_api_prompt_done",
+  API_PROMPT_ERROR: "clippy_api_prompt_error",
+  API_ABORT_REQUEST: "clippy_api_abort_request",
+
   // Clipboard
   CLIPBOARD_WRITE: "clippy_clipboard_write",
 };

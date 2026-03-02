@@ -52,6 +52,19 @@ export type ClippyApi = {
   deleteAllChats: () => Promise<void>;
   onNewChat: (callback: () => void) => void;
   offNewChat: () => void;
+  // API LLM
+  apiPromptStreaming: (request: any) => Promise<void>;
+  apiAbortRequest: (requestUUID: string) => Promise<void>;
+  onApiPromptChunk: (
+    callback: (requestUUID: string, chunk: string) => void,
+  ) => void;
+  offApiPromptChunk: () => void;
+  onApiPromptDone: (callback: (requestUUID: string) => void) => void;
+  offApiPromptDone: () => void;
+  onApiPromptError: (
+    callback: (requestUUID: string, error: string) => void,
+  ) => void;
+  offApiPromptError: () => void;
   // Clipboard
   clipboardWrite: (data: Data) => Promise<void>;
 };
